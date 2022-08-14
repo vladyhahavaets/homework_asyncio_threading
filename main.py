@@ -1,6 +1,5 @@
 import threading
 import asyncio
-from datetime import datetime
 
 
 def countdown_back_thread(number):
@@ -9,35 +8,22 @@ def countdown_back_thread(number):
     for i in range(number, 0, -1):
         print(i)
         sleep(1)
-        for k in range(10000000 * 3):
-            pass
 
 
-# def countdown(number):
-#     t = threading.Thread(target=countdown_back_thread, args=(number,))
-#     t.start()
+def countdown(number):
+    t = threading.Thread(target=countdown_back_thread, args=(number,))
+    t.start()
 
 
-start = datetime.now()
-t1 = threading.Thread(target=countdown_back_thread, args=(5,))
-t2 = threading.Thread(target=countdown_back_thread, args=(5,))
-t3 = threading.Thread(target=countdown_back_thread, args=(5,))
-t1.start()
-t2.start()
-t3.start()
-
-t1.join()
-t2.join()
-t3.join()
-print(datetime.now() - start)
+countdown(5)
+countdown(5)
+countdown(5)
 
 
 async def countdown_back_asyncio(number):
     for i in range(number, 0, -1):
         print(i)
         await asyncio.sleep(1)
-        for k in range(10000000 * 3):
-            pass
 
 
 async def countdown_asyncio(number):
@@ -45,12 +31,14 @@ async def countdown_asyncio(number):
     await t
 
 
-start = datetime.now()
 loop = asyncio.get_event_loop()
 tasks = asyncio.gather(countdown_asyncio(5), countdown_asyncio(5), countdown_asyncio(5))
 loop.run_until_complete(tasks)
-print(datetime.now() - start)
 
 '''
-asyncio помітно більш продуктивний у даному випадку
+при тестуванні продуктивності (попередній комміт (посилання знизу)), можна помітити, що asyncio кращий у даному випадку
+у цій задачі нам не потрібно розпаралелювати розрахунки, тому нам потрібна НЕ багатопоточність.
+у даному випадку є затримка, під час якої програма нічого не робить (інтервал в одну секунду і є затримкою), тому краще 
+використовувати асинхронність.
 '''
+'https://github.com/vladyhahavaets/homework_asyncio_threading/commit/166d63a6b51f67c542538943395a6e54f7f561a4'
