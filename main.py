@@ -31,24 +31,11 @@ async def countdown_back_asyncio(number):
         print(i)
         await asyncio.sleep(1)
 
-def decor(func):
-    def wrapper(*args, **kwargs):
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(func(*args, **kwargs))
-        return
-    return wrapper
 
-@decor
 async def countdown_asyncio(number):
     t = asyncio.create_task(countdown_back_asyncio(number))
     await t
 
-# loop = asyncio.get_event_loop()
-# tasks = asyncio.gather(countdown_asyncio(5),countdown_asyncio(5),countdown_asyncio(5) )
-# loop.run_until_complete(tasks)
-
-# через декоратор вони виконуються послідовно
-
-countdown_asyncio(5)
-countdown_asyncio(5)
-countdown_asyncio(5)
+loop = asyncio.get_event_loop()
+tasks = asyncio.gather(countdown_asyncio(5),countdown_asyncio(5),countdown_asyncio(5) )
+loop.run_until_complete(tasks)
